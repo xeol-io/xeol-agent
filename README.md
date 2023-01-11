@@ -76,7 +76,7 @@ log:
   level: "debug"
 
   # location to write the log file (default is not to have a log file)
-  file: "./kai.log"
+  file: "./xeol-agent.log"
 
 # enable/disable checking for application updates on startup
 check-for-app-update: true
@@ -95,7 +95,7 @@ kubeconfig:
 
 ### Namespace selection
 
-Configure which namespaces kai should search.
+Configure which namespaces xeol-agent should search.
 
 * `include` section
   * A list of explicit strings that will detail the list of namespaces to capture image data from.
@@ -143,7 +143,7 @@ namespace-selectors:
 
 ### Kubernetes API Parameters
 
-This section will allow users to tune the way kai interacts with the kubernetes API server.
+This section will allow users to tune the way xeol-agent interacts with the kubernetes API server.
 
 ```yaml
 # Kubernetes API configuration parameters (should not need tuning)
@@ -225,15 +225,13 @@ missing-tag-policy:
 ignore-not-running: true
 ```
 
-### Anchore API configuration
+### xeol.io API configuration
 
-Use this section to configure the Anchore Enterprise API endpoint
+Use this section to configure the xeol.io API endpoint
 
 ```yaml
-anchore:
-  url: <your anchore api url>
-  user: <kai_inventory_user>
-  password: $xeol-agent_ANCHORE_PASSWORD
+xeol:
+  api-key: $XEOL_API_KEY
   http:
     insecure: true
     timeout-seconds: 10
@@ -312,21 +310,14 @@ To build a docker image, you'll need to provide a kubeconfig.
 Note: Docker build requires files to be within the docker build context
 
 ```sh
-docker build -t localhost/kai:latest --build-arg KUBECONFIG=./kubeconfig .
-```
-
-### Shell Completion
-xeol-agent comes with shell completion for specifying namespaces, it can be enabled as follows. Run with the `--help` command to get the instructions for the shell of your choice
-
-```sh
-kai completion <zsh|bash|fish>
+docker build -t localhost/xeol-agent:latest --build-arg KUBECONFIG=./kubeconfig .
 ```
 
 ## Releasing
-To create a release of kai, a tag needs to be created that points to a commit in `main`
+To create a release of xeol-agent, a tag needs to be created that points to a commit in `main`
 that we want to release. This tag shall be a semver prefixed with a `v`, e.g. `v0.2.7`.
 This will trigger a GitHub Action that will create the release.
 
 After the release has been successfully created, make sure to specify the updated version
 in both Enterprise and the xeol-agent Helm Chart in
-[anchore-charts](https://github.com/anchore/anchore-charts).
+[xeol-charts](https://github.com/noqcks/xeol-charts).
