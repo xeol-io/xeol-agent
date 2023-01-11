@@ -3,7 +3,7 @@
 set -eux
 
 LATEST_COMMIT_HASH=$(git rev-parse HEAD | cut -c 1-8)
-RELEASE="acceptance-kai-$LATEST_COMMIT_HASH"
+RELEASE="acceptance-xeol-agent-$LATEST_COMMIT_HASH"
 
 function cleanup () {
   echo "Removing Helm Release: $RELEASE"
@@ -11,14 +11,14 @@ function cleanup () {
 }
 trap cleanup EXIT
 
-helm repo add anchore https://charts.anchore.io
+helm repo add xeol https://charts.xeol.io
 
-helm install "$RELEASE" -f ./test/acceptance/fixtures/helm/values.yaml anchore/kai
+helm install "$RELEASE" -f ./test/acceptance/fixtures/helm/values.yaml noqcks/xeol-agent
 
 sleep 1
 max_iterations=60
 iterations=0
-while [[ $(kubectl get pods -l app.kubernetes.io/name=kai -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
+while [[ $(kubectl get pods -l app.kubernetes.io/name=xeol-agent -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
 do
   echo "waiting for pod to be ready" && sleep 1
   iterations=$((iterations+1))

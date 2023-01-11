@@ -5,21 +5,20 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/anchore/kai/kai/mode"
+	"github.com/noqcks/xeol-agent/agent/mode"
 
-	"github.com/anchore/kai/kai"
-	"github.com/anchore/kai/kai/presenter"
+	agent "github.com/noqcks/xeol-agent/agent"
+	"github.com/noqcks/xeol-agent/agent/presenter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "kai",
-	Short: "KAI tells Anchore which images are in use in your Kubernetes Cluster",
-	Long: `KAI (Kubernetes Automated Inventory) can poll
-    Kubernetes Cluster API(s) to tell Anchore which Images are currently in-use`,
-	Args: cobra.MaximumNArgs(0),
+	Use:   "xeol-agent",
+	Short: "xeol-agent tells xeol.io which resources are in use in your Kubernetes Cluster",
+	Long:  `xeol-agent can poll Kubernetes Cluster API(s) to tell xeol.io which resources are currently in-use`,
+	Args:  cobra.MaximumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		if appConfig.Dev.ProfileCPU {
 			f, err := os.Create("cpu.profile")
@@ -44,9 +43,9 @@ var rootCmd = &cobra.Command{
 
 		switch appConfig.RunMode {
 		case mode.PeriodicPolling:
-			kai.PeriodicallyGetInventoryReport(appConfig)
+			agent.PeriodicallyGetInventoryReport(appConfig)
 		default:
-			report, err := kai.GetInventoryReport(appConfig)
+			report, err := agent.GetInventoryReport(appConfig)
 			if appConfig.Dev.ProfileCPU {
 				pprof.StopCPUProfile()
 			}
@@ -54,7 +53,7 @@ var rootCmd = &cobra.Command{
 				log.Errorf("Failed to get Image Results: %+v", err)
 				os.Exit(1)
 			} else {
-				err := kai.HandleReport(report, appConfig)
+				err := agent.HandleReport(report, appConfig)
 				if err != nil {
 					log.Errorf("Failed to handle Image Results: %+v", err)
 					os.Exit(1)

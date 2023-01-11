@@ -12,7 +12,7 @@ log:
   level: "debug"
 
   # location to write the log file (default is not to have a log file)
-  file: "./kai.log"
+  file: "./xeol-agent.log"
 
 # enable/disable checking for application updates on startup
 check-for-app-update: true
@@ -82,7 +82,7 @@ ignore-not-running: true
 polling-interval-seconds: 300
 
 xeol:
-  api-key: $KAI_XEOL_API_KEY
+  api-key: $XEOL_API_KEY
 #  http:
 #    insecure: true
 #    timeout-seconds: 10

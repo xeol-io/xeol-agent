@@ -1,8 +1,4 @@
-/*
-Package kai retrieves Kubernetes In-Use Image data from the Kubernetes API. Runs adhoc and periodically, using the
-k8s go SDK
-*/
-package kai
+package agent
 
 import (
 	"context"
@@ -11,17 +7,17 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/anchore/kai/kai/presenter"
-	"github.com/anchore/kai/kai/reporter"
+	"github.com/noqcks/xeol-agent/agent/presenter"
+	"github.com/noqcks/xeol-agent/agent/reporter"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	"github.com/anchore/kai/internal/config"
-	"github.com/anchore/kai/internal/log"
-	"github.com/anchore/kai/kai/client"
-	"github.com/anchore/kai/kai/inventory"
-	"github.com/anchore/kai/kai/logger"
+	"github.com/noqcks/xeol-agent/agent/client"
+	"github.com/noqcks/xeol-agent/agent/inventory"
+	"github.com/noqcks/xeol-agent/agent/logger"
+	"github.com/noqcks/xeol-agent/internal/config"
+	"github.com/noqcks/xeol-agent/internal/log"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,13 +30,13 @@ type channels struct {
 }
 
 func HandleReport(report inventory.Report, cfg *config.Application) error {
-	// if cfg.XeolDetails.IsValid() {
-	if err := reporter.Post(report, cfg.XeolDetails, cfg); err != nil {
-		return fmt.Errorf("unable to report Inventory to Anchore: %w", err)
+	if cfg.XeolDetails.IsValid() {
+		if err := reporter.Post(report, cfg.XeolDetails, cfg); err != nil {
+			return fmt.Errorf("unable to report Inventory to xeol: %w", err)
+		}
+	} else {
+		log.Debug("xeol details not specified, not reporting inventory")
 	}
-	// } else {
-	// 	log.Debug("Anchore details not specified, not reporting inventory")
-	// }
 
 	if err := presenter.GetPresenter(cfg.PresenterOpt, report).Present(os.Stdout); err != nil {
 		return fmt.Errorf("unable to show inventory: %w", err)

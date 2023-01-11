@@ -16,5 +16,5 @@ assignees: ''
 **Anything else we need to know?**:
 
 **Environment**:
-- kai version (use `kai version`):
+- xeol-agent version (use `xeol-agent version`):
 - OS (e.g: `cat /etc/os-release` or similar):

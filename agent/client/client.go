@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/anchore/kai/internal/log"
+	"github.com/noqcks/xeol-agent/internal/log"
 
-	"github.com/anchore/kai/internal/config"
 	"github.com/mitchellh/go-homedir"
+	"github.com/noqcks/xeol-agent/internal/config"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"

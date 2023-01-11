@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anchore/kai/internal/config"
-	"github.com/anchore/kai/internal/logger"
-	"github.com/anchore/kai/kai"
+	agent "github.com/noqcks/xeol-agent/agent"
+	"github.com/noqcks/xeol-agent/internal/config"
+	"github.com/noqcks/xeol-agent/internal/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -74,7 +74,7 @@ func initLogging() {
 
 	logWrapper := logger.NewLogrusLogger(cfg)
 	log = logWrapper.Logger
-	kai.SetLogger(logWrapper)
+	agent.SetLogger(logWrapper)
 }
 
 func logAppConfig() {

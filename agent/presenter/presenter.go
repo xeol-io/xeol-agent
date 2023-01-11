@@ -4,9 +4,9 @@ package presenter
 import (
 	"io"
 
-	"github.com/anchore/kai/kai/inventory"
-	"github.com/anchore/kai/kai/presenter/json"
-	"github.com/anchore/kai/kai/presenter/table"
+	"github.com/noqcks/xeol-agent/agent/inventory"
+	"github.com/noqcks/xeol-agent/agent/presenter/json"
+	"github.com/noqcks/xeol-agent/agent/presenter/table"
 )
 
 // Presenter is the main interface other Presenters need to implement

@@ -1,19 +1,20 @@
 package integration
 
 import (
+	"strings"
 	"testing"
 
-	"github.com/anchore/kai/cmd"
-	"github.com/anchore/kai/kai"
+	agent "github.com/noqcks/xeol-agent/agent"
+	"github.com/noqcks/xeol-agent/cmd"
 )
 
-const IntegrationTestNamespace = "kai-integration-test"
+const IntegrationTestNamespace = "xeol-agent-integration-test"
 const IntegrationTestImageTag = "nginx:latest"
 
 // Assumes that the hello-world helm chart in ./fixtures was installed (basic nginx container)
 func TestGetImageResults(t *testing.T) {
 	cmd.InitAppConfig()
-	report, err := kai.GetInventoryReport(cmd.GetAppConfig())
+	report, err := agent.GetInventoryReport(cmd.GetAppConfig())
 	if err != nil {
 		t.Fatalf("failed to get image results: %v", err)
 	}
@@ -33,16 +34,16 @@ func TestGetImageResults(t *testing.T) {
 		} else {
 			foundIntegrationTestNamespace = true
 			foundIntegrationTestImage := false
-			// for _, image := range item.Images {
-			// 	if !strings.Contains(image.Tag, IntegrationTestImageTag) {
-			// 		continue
-			// 	} else {
-			// 		foundIntegrationTestImage = true
-			// 		if image.RepoDigest == "" {
-			// 			t.Logf("Image Found, but no digest located: %v", image)
-			// 		}
-			// 	}
-			// }
+			for _, container := range item.Containers {
+				if !strings.Contains(container.Image.Tag, IntegrationTestImageTag) {
+					continue
+				} else {
+					foundIntegrationTestImage = true
+					if container.Image.RepoDigest == "" {
+						t.Logf("Image Found, but no digest located: %v", container.Image)
+					}
+				}
+			}
 			if !foundIntegrationTestImage {
 				t.Errorf("failed to locate integration test image")
 			}

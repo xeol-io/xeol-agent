@@ -1,4 +1,4 @@
-configpath: ../../kai.yaml
+configpath: ../../agent.yaml
 presenteropt: 1
 output: json
 quiet: false
@@ -6,9 +6,9 @@ log:
   structured: false
   levelopt: debug
   level: debug
-  filelocation: ./kai.log
+  filelocation: ./xeol-agent.log
 clioptions:
-  configpath: ../../kai.yaml
+  configpath: ../../agent.yaml
   verbosity: 0
 dev:
   profilecpu: false
@@ -39,11 +39,8 @@ runmode: 0
 mode: adhoc
 ignorenotrunning: true
 pollingintervalseconds: 300
-XeolDetails:
-  url: ""
-  user: ""
-  password: '******'
-  account: admin
+xeoldetails:
+  apikey: '******'
   http:
     insecure: false
-    timeoutseconds: 10
+    timeoutseconds: 0

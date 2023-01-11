@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anchore/kai/internal"
-	"github.com/anchore/kai/internal/version"
+	"github.com/noqcks/xeol-agent/internal"
+	"github.com/noqcks/xeol-agent/internal/version"
 	"github.com/spf13/cobra"
 )
 

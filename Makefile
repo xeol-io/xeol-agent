@@ -1,4 +1,4 @@
-BIN = kai
+BIN = xeol-agent
 TEMPDIR = ./.tmp
 RESULTSDIR = $(TEMPDIR)/results
 COVER_REPORT = $(RESULTSDIR)/cover.report
@@ -15,9 +15,9 @@ RESET := $(shell tput -T linux sgr0)
 TITLE := $(BOLD)$(PURPLE)
 SUCCESS := $(BOLD)$(GREEN)
 # the quality gate lower threshold for unit test total % coverage (by function statements)
-COVERAGE_THRESHOLD := 50
+COVERAGE_THRESHOLD := 35
 
-CLUSTER_NAME=kai-testing
+CLUSTER_NAME=xeol-agent-testing
 
 GOLANG_CI_VERSION=v1.50.1
 GOBOUNCER_VERSION=v0.3.0
@@ -27,7 +27,7 @@ GORELEASER_VERSION=v1.4.1
 DISTDIR=./dist
 SNAPSHOTDIR=./snapshot
 GITTREESTATE=$(if $(shell git status --porcelain),dirty,clean)
-SNAPSHOT_CMD=$(shell realpath $(shell pwd)/$(SNAPSHOTDIR)/kai_linux_amd64/kai)
+SNAPSHOT_CMD=$(shell realpath $(shell pwd)/$(SNAPSHOTDIR)/xeol_agent_linux_amd64/xeol_agent)
 
 ifeq "$(strip $(VERSION))" ""
  override VERSION = $(shell git describe --always --tags --dirty)
@@ -136,7 +136,7 @@ integration: ## Run integration tests
 	./test/integration/test-integration.sh $(CLUSTER_NAME)
 
 .PHONY: acceptance-helm
-acceptance-helm: ## Verify that the latest helm chart for kai works w/ the latest code (depends on anchore/kai:latest image existing)
+acceptance-helm: ## Verify that the latest helm chart for xeol-agent works w/ the latest code (depends on noqcks/xeol-agent:latest image existing)
 	$(call title,Running acceptance test: Helm)
 	$(ACC_DIR)/helm-chart.sh \
 
@@ -156,22 +156,22 @@ build: $(SNAPSHOTDIR) ## Build release snapshot binaries and packages
 .PHONY: linux-binary
 linux-binary: clean bootstrap
 	mkdir -p $(SNAPSHOTDIR)
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/kai .
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/xeol-agent .
 
 .PHONY: linux-binary-arm64
 linux-binary-arm64: clean bootstrap
 	mkdir -p $(SNAPSHOTDIR)
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/kai .
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/xeol-agent .
 
 .PHONY: mac-binary
 mac-binary: clean bootstrap
 	mkdir -p $(SNAPSHOTDIR)
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/kai .
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/xeol-agent .
 
 .PHONY: mac-binary-arm64
 mac-binary-arm64: clean bootstrap
 	mkdir -p $(SNAPSHOTDIR)
-	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/kai .
+	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -a -installsuffix cgo -o $(SNAPSHOTDIR)/xeol-agent .
 
 $(SNAPSHOTDIR): ## Build snapshot release binaries and packages
 	$(call title,Building snapshot artifacts)

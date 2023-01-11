@@ -1,0 +1,54 @@
+{
+ "timestamp": "2020-09-18T11:00:49Z",
+ "results": [
+  {
+   "namespace": "docker",
+   "containers": [
+    {
+     "name": "docker",
+     "image": {
+      "tag": "docker/kube-compose-controller:v0.4.25-alpha1",
+      "repoDigest": "sha256:6ad2d6a2cc1909fbc477f64e3292c16b88db31eb83458f420eb223f119f3dffd"
+     },
+     "pod": {
+      "name": "docker",
+      "deployment": {
+       "name": "docker"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "namespace": "kube-system",
+   "containers": [
+    {
+     "name": "kube-system",
+     "image": {
+      "tag": "docker/kube-compose-controller:v0.4.25-alpha1",
+      "repoDigest": "sha256:6ad2d6a2cc1909fbc477f64e3292c16b88db31eb83458f420eb223f119f3dffd"
+     },
+     "pod": {
+      "name": "kube-system",
+      "deployment": {
+       "name": "kube-system"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "serverVersionMetadata": {
+  "major": "1",
+  "minor": "16+",
+  "gitVersion": "v1.16.6-beta.0",
+  "gitCommit": "e7f962ba86f4ce7033828210ca3556393c377bcc",
+  "gitTreeState": "clean",
+  "buildDate": "2020-01-15T08:18:29Z",
+  "goVersion": "go1.13.5",
+  "compiler": "gc",
+  "platform": "linux/amd64"
+ },
+ "cluster_name": "docker-desktop",
+ "inventory_type": "kubernetes"
+}

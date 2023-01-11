@@ -1,5 +1,5 @@
 
 image:
-  repository: anchore/kai
+  repository: noqcks/xeol-agent
   pullPolicy: IfNotPresent
   tag: "latest"

@@ -1,176 +1,37 @@
-# KAI (Kubernetes Automated Inventory)
-[![CircleCI](https://circleci.com/gh/anchore/kai.svg?style=svg&circle-token=6f6ffa17b0630e6af622e162d594e2312c136d94)](https://circleci.com/gh/anchore/kai)
-[![Go Report Card](https://goreportcard.com/badge/github.com/anchore/kai)](https://goreportcard.com/report/github.com/anchore/kai)
-[![GitHub release](https://img.shields.io/github/release/anchore/kai.svg)](https://github.com/anchore/kai/releases/latest)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/anchore/kai/blob/main/LICENSE)
+# xeol-agent
 
-KAI polls the Kubernetes API on an interval to retrieve which images are currently in use.
+[![CircleCI](https://circleci.com/gh/noqcks/xeol-agent.svg?style=svg&circle-token=6f6ffa17b0630e6af622e162d594e2312c136d94)](https://circleci.com/gh/noqcks/xeol-agent)
+[![Go Report Card](https://goreportcard.com/badge/github.com/noqcks/xeol-agent)](https://goreportcard.com/report/github.com/noqcks/xeol-agent)
+[![GitHub release](https://img.shields.io/github/release/noqcks/xeol-agent.svg)](https://github.com/noqcks/xeol-agent/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/noqcks/xeol-agent/blob/main/LICENSE)
+
+The xeol-agent poll the Kubernetes API on an interval to retrieve inventory data about the
+the cluster and reports back to xeol.io.
 
 It can be run inside a cluster (under a Service Account) or outside (via any provided Kubeconfig).
 
 ## Getting Started
-[Install the binary](#installation) or Download the [Docker image](https://hub.docker.com/repository/docker/anchore/kai)
+
+[Install the binary](#installation) or Download the [Docker image](https://hub.docker.com/repository/docker/noqcks/xeol-agent)
 
 ## Installation
-KAI can be run as a CLI, Docker Container, or Helm Chart
 
-By default, KAI will look for a Kubeconfig in the home directory to use to authenticate (when run as a CLI).
-
-### CLI
-```shell script
-$ kai
-{
-  "timestamp": "2021-11-17T18:47:36Z",
-  "results": [
-    {
-      "namespace": "kube-node-lease",
-      "images": []
-    },
-    {
-      "namespace": "kube-public",
-      "images": []
-    },
-    {
-      "namespace": "default",
-      "images": [
-        {
-          "tag": "alpine:4ed1812024ed78962a34727137627e8854a3b414d19e2c35a1dc727a47e16fba",
-          "repoDigest": "sha256:4ed1812024ed78962a34727137627e8854a3b414d19e2c35a1dc727a47e16fba"
-        },
-        {
-          "tag": "memcached:05a8f320f47594e13a995ce6010bf1a1ffefbc0801af3db71a4b307d80507e1f",
-          "repoDigest": "sha256:05a8f320f47594e13a995ce6010bf1a1ffefbc0801af3db71a4b307d80507e1f"
-        },
-        {
-          "tag": "python:f0a210a37565286ecaaac0529a6749917e8ea58d3dfc72c84acfbfbe1a64a20a",
-          "repoDigest": "sha256:f0a210a37565286ecaaac0529a6749917e8ea58d3dfc72c84acfbfbe1a64a20a"
-        }
-      ]
-    },
-    {
-      "namespace": "kube-system",
-      "images": [
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon-k8s-cni-init:v1.7.5-eksbuild.1",
-          "repoDigest": "sha256:d96d712513464de6ce94e422634a25546565418f20d1b28d3bce399d578f3296"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon-k8s-cni:v1.7.5-eksbuild.1",
-          "repoDigest": "sha256:f310c918ee2b4ebced76d2d64a2ec128dde3b364d1b495f0ae73011f489d474d"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/coredns:v1.8.4-eksbuild.1",
-          "repoDigest": "sha256:fcb60ebdb0d8ec23abe46c65d0f650d9e2bf2f803fac004ceb1f0bf348db0fd0"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/kube-proxy:v1.21.2-eksbuild.2",
-          "repoDigest": "sha256:0ea6717ed144c7f04922bf56662d58d5b14b7b62ef78c70e636a02d22052681c"
-        }
-      ]
-    }
-  ],
-  "serverVersionMetadata": {
-    "major": "1",
-    "minor": "21+",
-    "gitVersion": "v1.21.2-eks-06eac09",
-    "gitCommit": "5f6d83fe4cb7febb5f4f4e39b3b2b64ebbbe3e97",
-    "gitTreeState": "clean",
-    "buildDate": "2021-09-13T14:20:15Z",
-    "goVersion": "go1.16.5",
-    "compiler": "gc",
-    "platform": "linux/amd64"
-  },
-  "cluster_name": "eks-prod",
-  "inventory_type": "kubernetes"
-}
-```
-### Container
-
-In order to run kai as a container, it needs a kubeconfig
-```sh
-~ docker run -it --rm -v ~/.kube/config:/.kube/config anchore/kai:v0.3.0
-{
-  "timestamp": "2021-11-17T18:47:36Z",
-  "results": [
-    {
-      "namespace": "kube-node-lease",
-      "images": []
-    },
-    {
-      "namespace": "kube-public",
-      "images": []
-    },
-    {
-      "namespace": "default",
-      "images": [
-        {
-          "tag": "alpine:4ed1812024ed78962a34727137627e8854a3b414d19e2c35a1dc727a47e16fba",
-          "repoDigest": "sha256:4ed1812024ed78962a34727137627e8854a3b414d19e2c35a1dc727a47e16fba"
-        },
-        {
-          "tag": "memcached:05a8f320f47594e13a995ce6010bf1a1ffefbc0801af3db71a4b307d80507e1f",
-          "repoDigest": "sha256:05a8f320f47594e13a995ce6010bf1a1ffefbc0801af3db71a4b307d80507e1f"
-        },
-        {
-          "tag": "python:f0a210a37565286ecaaac0529a6749917e8ea58d3dfc72c84acfbfbe1a64a20a",
-          "repoDigest": "sha256:f0a210a37565286ecaaac0529a6749917e8ea58d3dfc72c84acfbfbe1a64a20a"
-        }
-      ]
-    },
-    {
-      "namespace": "kube-system",
-      "images": [
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon-k8s-cni-init:v1.7.5-eksbuild.1",
-          "repoDigest": "sha256:d96d712513464de6ce94e422634a25546565418f20d1b28d3bce399d578f3296"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/amazon-k8s-cni:v1.7.5-eksbuild.1",
-          "repoDigest": "sha256:f310c918ee2b4ebced76d2d64a2ec128dde3b364d1b495f0ae73011f489d474d"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/coredns:v1.8.4-eksbuild.1",
-          "repoDigest": "sha256:fcb60ebdb0d8ec23abe46c65d0f650d9e2bf2f803fac004ceb1f0bf348db0fd0"
-        },
-        {
-          "tag": "602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/kube-proxy:v1.21.2-eksbuild.2",
-          "repoDigest": "sha256:0ea6717ed144c7f04922bf56662d58d5b14b7b62ef78c70e636a02d22052681c"
-        }
-      ]
-    }
-  ],
-  "serverVersionMetadata": {
-    "major": "1",
-    "minor": "21+",
-    "gitVersion": "v1.21.2-eks-06eac09",
-    "gitCommit": "5f6d83fe4cb7febb5f4f4e39b3b2b64ebbbe3e97",
-    "gitTreeState": "clean",
-    "buildDate": "2021-09-13T14:20:15Z",
-    "goVersion": "go1.16.5",
-    "compiler": "gc",
-    "platform": "linux/amd64"
-  },
-  "cluster_name": "eks-prod",
-  "inventory_type": "kubernetes"
-}
-```
-
+xeol-agent can be installed via the Helm Chart
 ### Helm Chart
 
-KAI is the foundation of Anchore Enterprise's Runtime Inventory feature. Running KAI via Helm is a great way to retrieve your Kubernetes Image inventory without providing Cluster Credentials to Anchore.
+xeol-agent runs as a read-only service account in the cluster it's deployed to.
 
-KAI runs as a read-only service account in the cluster it's deployed to.
-
-In order to report the inventory to Anchore, KAI does require authentication material for your Anchore Enterprise deployment.
-KAI's helm chart automatically creates a kubernetes secret for the Anchore Password based on the values file you use, Ex.:
+In order to report the inventory to xeol.io, xeol-agent does require an api key for your xeol.io organization.
+xeol-agent's helm chart automatically creates a kubernetes secret for the xeol.io apiKey
+based on the values file you use, Ex.:
 
 ```yaml
-kai:
-  anchore:
-    password: foobar
+xeolAgent:
+  xeol:
+    apiKey: foobar
 ```
 
-It will set the following environment variable based on this: `KAI_ANCHORE_PASSWORD=foobar`.
+It will set the following environment variable based on this: `XEOL_AGENT_API_KEY=foobar`.
 
 If you don't want to store your Anchore password in the values file, you can create your own secret to do this:
 
@@ -178,27 +39,27 @@ If you don't want to store your Anchore password in the values file, you can cre
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kai-anchore-password
+  name: xeol-agent-api-key
 type: Opaque
 stringData:
-  KAI_ANCHORE_PASSWORD: foobar
+  XEOL_AGENT_API_KEY: foobar
 ```
 
 and then provide it to the helm chart via the values file:
 
 ```yaml
-kai:
-  existingSecret: kai-anchore-password
+xeolAgent:
+  existingSecret: xeol-agent-api-key
 ```
 
-KAI's helm chart is part of the [charts.anchore.io](https://charts.anchore.io) repo. You can install it via:
+xeol-agent's helm chart is part of the [charts.xeol.io](https://charts.xeol.io) repo. You can install it via:
 
 ```sh
-helm repo add anchore https://charts.anchore.io
-helm install <release-name> -f <values.yaml> anchore/kai
+helm repo add xeol https://charts.xeol.io
+helm install <release-name> -f <values.yaml> noqcks/xeol-agent
 ```
 
-A basic values file can always be found [here](https://github.com/anchore/anchore-charts/tree/master/stable/kai/values.yaml)
+A basic values file can always be found [here](https://github.com/noqcks/xeol-charts/tree/master/stable/xeol-agent/values.yaml)
 
 ## Configuration
 ```yaml
@@ -298,7 +159,7 @@ kubernetes:
   worker-pool-size: 100
 ```
 
-### KAI mode of operation
+### xeol-agent mode of operation
 
 ```yaml
 # Can be one of adhoc, periodic (defaults to adhoc)
@@ -373,7 +234,7 @@ Use this section to configure the Anchore Enterprise API endpoint
 anchore:
   url: <your anchore api url>
   user: <kai_inventory_user>
-  password: $KAI_ANCHORE_PASSWORD
+  password: $xeol-agent_ANCHORE_PASSWORD
   http:
     insecure: true
     timeout-seconds: 10
@@ -398,7 +259,7 @@ kubernetes:
   request-timeout-seconds: 60
 ```
 
-KAI will still honor the old configuration. It will prefer the old configuration
+xeol-agent will still honor the old configuration. It will prefer the old configuration
 parameter until it is removed from the config entirely. It is safe to remove the
 old configuration in favor of the new config.
 
@@ -456,7 +317,7 @@ docker build -t localhost/kai:latest --build-arg KUBECONFIG=./kubeconfig .
 ```
 
 ### Shell Completion
-KAI comes with shell completion for specifying namespaces, it can be enabled as follows. Run with the `--help` command to get the instructions for the shell of your choice
+xeol-agent comes with shell completion for specifying namespaces, it can be enabled as follows. Run with the `--help` command to get the instructions for the shell of your choice
 
 ```sh
 kai completion <zsh|bash|fish>
@@ -468,5 +329,5 @@ that we want to release. This tag shall be a semver prefixed with a `v`, e.g. `v
 This will trigger a GitHub Action that will create the release.
 
 After the release has been successfully created, make sure to specify the updated version
-in both Enterprise and the KAI Helm Chart in
+in both Enterprise and the xeol-agent Helm Chart in
 [anchore-charts](https://github.com/anchore/anchore-charts).

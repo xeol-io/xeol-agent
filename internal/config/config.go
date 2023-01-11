@@ -2,11 +2,11 @@
 The Config package handles the application configuration. Configurations can come from a variety of places, and
 are listed below in order of precedence:
   - Command Line
-  - .kai.yaml
-  - .kai/config.yaml
-  - ~/.kai.yaml
-  - <XDG_CONFIG_HOME>/kai/config.yaml
-  - Environment Variables prefixed with KAI_
+  - .agent.yaml
+  - .agent/config.yaml
+  - ~/.agent.yaml
+  - <XDG_CONFIG_HOME>/agent/config.yaml
+  - Environment Variables prefixed with AGENT_
 */
 package config
 
@@ -15,12 +15,12 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/anchore/kai/kai/mode"
+	"github.com/noqcks/xeol-agent/agent/mode"
 
 	"github.com/adrg/xdg"
-	"github.com/anchore/kai/internal"
-	"github.com/anchore/kai/kai/presenter"
 	"github.com/mitchellh/go-homedir"
+	"github.com/noqcks/xeol-agent/agent/presenter"
+	"github.com/noqcks/xeol-agent/internal"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
@@ -79,7 +79,7 @@ type KubernetesAPI struct {
 
 // Information for posting in-use image details to Anchore (or any URL for that matter)
 type XeolInfo struct {
-	ApiKey string     `mapstructure:"api-key"`
+	APIKey string     `mapstructure:"api-key"`
 	HTTP   HTTPConfig `mapstructure:"http"`
 }
 
@@ -104,7 +104,7 @@ type Development struct {
 
 // Return whether or not XeolDetails are specified
 func (xeol *XeolInfo) IsValid() bool {
-	return xeol.ApiKey != ""
+	return xeol.APIKey != ""
 }
 
 func setNonCliDefaultValues(v *viper.Viper) {
@@ -301,8 +301,8 @@ func (cfg Application) String() string {
 	// redact sensitive information
 	// Note: If the configuration grows to have more redacted fields it would be good to refactor this into something that
 	// is more dynamic based on a property or list of "sensitive" fields
-	if cfg.XeolDetails.ApiKey != "" {
-		cfg.XeolDetails.ApiKey = redacted
+	if cfg.XeolDetails.APIKey != "" {
+		cfg.XeolDetails.APIKey = redacted
 	}
 
 	if cfg.KubeConfig.User.PrivateKey != "" {

@@ -1,4 +1,4 @@
 package internal
 
 // note: do not change this
-const ApplicationName = "kai"
+const ApplicationName = "xeol-agent"

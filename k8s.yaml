@@ -60,11 +60,8 @@ data:
     missing-tag-policy:
       policy: digest
       tag: UNKNOWN
-    anchore:
-      url:
-      user: admin
-      password: $KAI_ANCHORE_PASSWORD
-      account: admin
+    xeol:
+      api-key: 87858b89-ac95-4ae4-a6ec-6c054e388f49
       http:
         insecure: true
         timeout-seconds: 10

@@ -1,4 +1,4 @@
-module github.com/anchore/kai
+module github.com/noqcks/xeol-agent
 
 go 1.18
 

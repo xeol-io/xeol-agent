@@ -39,11 +39,8 @@ runmode: 0
 mode: ""
 ignorenotrunning: false
 pollingintervalseconds: 0
-XeolDetails:
-  url: ""
-  user: ""
-  password: ""
-  account: ""
+xeoldetails:
+  apikey: ""
   http:
     insecure: false
     timeoutseconds: 0
