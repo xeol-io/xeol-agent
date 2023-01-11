@@ -7,3 +7,5 @@ permit:
 ignore-packages:
   # packageurl-go is released under the MIT license located in the root of the repo at /mit.LICENSE
   - github.com/package-url/packageurl-go
+  # there's a bug in check for crypto/internal/boring
+  - crypto/internal/boring

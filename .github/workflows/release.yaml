@@ -29,7 +29,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: snapshot
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
           # This check name is defined as the github actions job name (in .github/workflows/acceptance-test.yaml)
           checkName: "Build-Snapshot-Artifacts"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -38,7 +38,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: static-analysis
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
           # This check name is defined as the github actions job name (in .github/workflows/acceptance-test.yaml)
           checkName: "Static-Analysis (1.x, ubuntu-latest)"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -47,7 +47,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: tests-unit-int
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
           # This check name is defined as the github actions job name (in .github/workflows/acceptance-test.yaml)
           checkName: "Tests (1.x, ubuntu-latest)"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -56,7 +56,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: acceptance-helm-1-13-12
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
           # This check name is defined as the github action job name + the kubernetes version (see below) (in .github/workflows/acceptance-test.yaml)
           checkName: "Acceptance-Helm (v1.13.12)"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -65,7 +65,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: acceptance-helm-1-18-0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
           # This check name is defined as the github action job name + the kubernetes version (see below) (in .github/workflows/acceptance-test.yaml)
           checkName: "Acceptance-Helm (v1.18.0)"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -109,35 +109,19 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: make ci-bootstrap
 
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v2
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.SIGNING_GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.SIGNING_GPG_PASSPHRASE }}
-
-      - name: GPG signing info
-        run: |
-          echo "fingerprint: ${{ steps.import_gpg.outputs.fingerprint }}"
-          echo "keyid:       ${{ steps.import_gpg.outputs.keyid }}"
-          echo "name:        ${{ steps.import_gpg.outputs.name }}"
-          echo "email:       ${{ steps.import_gpg.outputs.email }}"
 
       - name: Login to Docker Hub
         id: docker-login
         run: |
           echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
         env:
-          DOCKER_USER: ${{ secrets.TOOLBOX_DOCKER_USER }}
-          DOCKER_PASS: ${{ secrets.TOOLBOX_DOCKER_PASS }}
+          DOCKER_USER: ${{ secrets.NOQCKS_DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.NOQCKS_DOCKER_PASS }}
 
       - name: Build snapshot artifacts
         run: make release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_PRIVATE_KEY: ${{ secrets.SIGNING_GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.SIGNING_GPG_PASSPHRASE }}
-          SIGNING_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GITHUB_TOKEN: ${{ secrets.NOQCKS_GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v2
         with:
