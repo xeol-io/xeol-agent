@@ -27,13 +27,13 @@ func (pres *Presenter) Present(output io.Writer) error {
 	rows := make([][]string, 0)
 
 	columns := []string{"Image Tag", "Repo Digest", "Namespace"}
-	for _, n := range pres.report.Results {
-		namespace := n.Namespace
-		for _, image := range n.Images {
-			row := []string{image.Tag, image.RepoDigest, namespace}
-			rows = append(rows, row)
-		}
-	}
+	// for _, n := range pres.report.Results {
+	// namespace := n.Namespace
+	// for _, image := range n.Images {
+	// 	row := []string{image.Tag, image.RepoDigest, namespace}
+	// 	rows = append(rows, row)
+	// }
+	// }
 
 	if len(rows) == 0 {
 		_, err := io.WriteString(output, "No Images found\n")

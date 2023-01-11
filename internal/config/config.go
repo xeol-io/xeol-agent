@@ -52,10 +52,10 @@ type Application struct {
 	NamespaceSelectors              NamespaceSelector `mapstructure:"namespace-selectors"`
 	MissingTagPolicy                MissingTagConf    `mapstructure:"missing-tag-policy"`
 	RunMode                         mode.Mode
-	Mode                            string      `mapstructure:"mode"`
-	IgnoreNotRunning                bool        `mapstructure:"ignore-not-running"`
-	PollingIntervalSeconds          int         `mapstructure:"polling-interval-seconds"`
-	AnchoreDetails                  AnchoreInfo `mapstructure:"anchore"`
+	Mode                            string   `mapstructure:"mode"`
+	IgnoreNotRunning                bool     `mapstructure:"ignore-not-running"`
+	PollingIntervalSeconds          int      `mapstructure:"polling-interval-seconds"`
+	XeolDetails                     XeolInfo `mapstructure:"xeol"`
 }
 
 // MissingTagConf details the policy for handling missing tags when reporting images
@@ -78,12 +78,9 @@ type KubernetesAPI struct {
 }
 
 // Information for posting in-use image details to Anchore (or any URL for that matter)
-type AnchoreInfo struct {
-	URL      string     `mapstructure:"url"`
-	User     string     `mapstructure:"user"`
-	Password string     `mapstructure:"password"`
-	Account  string     `mapstructure:"account"`
-	HTTP     HTTPConfig `mapstructure:"http"`
+type XeolInfo struct {
+	ApiKey string     `mapstructure:"api-key"`
+	HTTP   HTTPConfig `mapstructure:"http"`
 }
 
 // Configurations for the HTTP Client itself (net/http)
@@ -105,11 +102,9 @@ type Development struct {
 	ProfileCPU bool `mapstructure:"profile-cpu"`
 }
 
-// Return whether or not AnchoreDetails are specified
-func (anchore *AnchoreInfo) IsValid() bool {
-	return anchore.URL != "" &&
-		anchore.User != "" &&
-		anchore.Password != ""
+// Return whether or not XeolDetails are specified
+func (xeol *XeolInfo) IsValid() bool {
+	return xeol.ApiKey != ""
 }
 
 func setNonCliDefaultValues(v *viper.Viper) {
@@ -306,8 +301,8 @@ func (cfg Application) String() string {
 	// redact sensitive information
 	// Note: If the configuration grows to have more redacted fields it would be good to refactor this into something that
 	// is more dynamic based on a property or list of "sensitive" fields
-	if cfg.AnchoreDetails.Password != "" {
-		cfg.AnchoreDetails.Password = redacted
+	if cfg.XeolDetails.ApiKey != "" {
+		cfg.XeolDetails.ApiKey = redacted
 	}
 
 	if cfg.KubeConfig.User.PrivateKey != "" {

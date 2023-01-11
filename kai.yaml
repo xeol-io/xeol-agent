@@ -81,10 +81,8 @@ ignore-not-running: true
 # Only respected if mode is periodic
 polling-interval-seconds: 300
 
-anchore:
-#  url:
-#  user: admin
-  password: $KAI_ANCHORE_PASSWORD
+xeol:
+  api-key: $KAI_XEOL_API_KEY
 #  http:
 #    insecure: true
 #    timeout-seconds: 10

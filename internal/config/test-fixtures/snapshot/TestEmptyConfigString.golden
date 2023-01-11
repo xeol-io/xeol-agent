@@ -39,7 +39,7 @@ runmode: 0
 mode: ""
 ignorenotrunning: false
 pollingintervalseconds: 0
-anchoredetails:
+XeolDetails:
   url: ""
   user: ""
   password: ""

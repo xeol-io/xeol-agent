@@ -1,6 +1,6 @@
 FROM gcr.io/distroless/static:nonroot
 
-COPY kai /usr/bin
+COPY xeol-agent /usr/bin
 
 USER nonroot:nobody
 
@@ -18,4 +18,4 @@ LABEL org.opencontainers.image.vendor="Anchore, Inc."
 LABEL org.opencontainers.image.version=$BUILD_VERSION
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 
-ENTRYPOINT ["kai"]
+ENTRYPOINT ["xeol-agent"]

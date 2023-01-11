@@ -39,7 +39,7 @@ runmode: 0
 mode: adhoc
 ignorenotrunning: true
 pollingintervalseconds: 300
-anchoredetails:
+XeolDetails:
   url: ""
   user: ""
   password: '******'

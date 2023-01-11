@@ -6,69 +6,53 @@ import (
 	"strings"
 
 	"github.com/anchore/kai/internal/log"
+	appsv1 "k8s.io/api/apps/v1"
+
 	v1 "k8s.io/api/core/v1"
 )
 
-// ReportItem represents a namespace and all it's unique images
-type ReportItem struct {
-	Namespace string        `json:"namespace,omitempty"`
-	Images    []ReportImage `json:"images"`
+type Container struct {
+	Name  string `json:"name,omitempty"`
+	Image Image  `json:"image,omitempty"`
+	Pod   Pod    `json:"pod,omitempty"`
 }
 
-// ReportImage represents a unique image in a cluster
-type ReportImage struct {
+type Image struct {
 	Tag        string `json:"tag,omitempty"`
 	RepoDigest string `json:"repoDigest,omitempty"`
 }
+type Pod struct {
+	Name       string     `json:"name,omitempty"`
+	Deployment Deployment `json:"deployment,omitempty"`
+}
+
+type Deployment struct {
+	Name string `json:"name,omitempty"`
+}
+
+// ReportItem represents a namespace and all it's unique images
+type ReportItem struct {
+	Namespace  string      `json:"namespace,omitempty"`
+	Containers []Container `json:"containers"`
+}
 
 // NewReportItem parses a list of pods into a ReportItem full of unique images
-func NewReportItem(pods []v1.Pod, namespace string, ignoreNotRunning bool, missingTagPolicy string, dummyTag string) ReportItem {
+func NewReportItem(pods []v1.Pod, deployments []appsv1.Deployment, namespace string, ignoreNotRunning bool, missingTagPolicy string, dummyTag string) ReportItem {
 	reportItem := ReportItem{
 		Namespace: namespace,
-		Images:    []ReportImage{},
 	}
 
+	var containers []Container
 	for _, pod := range pods {
 		// Check for non-running
 		if ignoreNotRunning && pod.Status.Phase != "Running" {
 			continue
 		}
-		reportItem.extractUniqueImages(pod, missingTagPolicy, dummyTag)
+		containers = append(containers, processContainer(pod, missingTagPolicy, dummyTag, deployments)...)
 	}
 
+	reportItem.Containers = containers
 	return reportItem
-}
-
-// String represent the ReportItem as a string
-func (r *ReportItem) String() string {
-	return fmt.Sprintf("ReportItem(namespace=%s, images=%v)", r.Namespace, r.Images)
-}
-
-// key will return a unique key for a ReportImage
-func (i *ReportImage) key() string {
-	return fmt.Sprintf("%s@%s", i.Tag, i.RepoDigest)
-}
-
-// Adds an ReportImage to the ReportItem struct (if it doesn't exist there already)
-//
-// IMPORTANT: Ensures unique images across pods
-func (r *ReportItem) extractUniqueImages(pod v1.Pod, missingTagPolicy string, dummyTag string) {
-	// Build a Map to make use as a Set (unique list). Values
-	// are empty structs so they don't waste space
-	unique := make(map[string]struct{})
-	for _, image := range r.Images {
-		unique[image.key()] = struct{}{}
-	}
-
-	// Process all containers in a pod and return all the unique images
-	images := processContainers(pod, missingTagPolicy, dummyTag)
-
-	// If the image isn't in the set already, append it to the list
-	for _, image := range images {
-		if _, exist := unique[image.key()]; !exist {
-			r.Images = append(r.Images, image)
-		}
-	}
 }
 
 // fillContainerDetails grabs all the relevant fields out of a pod object so
@@ -107,7 +91,7 @@ type image struct {
 	digest string
 }
 
-// Compile the regexes used for parsing once so they can be reused without having to recompile
+// // Compile the regexes used for parsing once so they can be reused without having to recompile
 var digestRegex = regexp.MustCompile(`@(sha[[:digit:]]{3}:[[:alnum:]]{32,})`)
 var tagRegex = regexp.MustCompile(`:[\w][\w.-]{0,127}$`)
 
@@ -173,39 +157,61 @@ func (img *image) handleMissingTag(missingTagPolicy string, dummyTag string) {
 // ReportImage structures from the containers inside the pod
 //
 // IMPORTANT: Ensures unique images inside a pod
-func processContainers(pod v1.Pod, missingTagPolicy string, dummyTag string) []ReportImage {
-	unique := make(map[string]image)
-
+func processContainer(pod v1.Pod, missingTagPolicy string, dummyTag string, deployments []appsv1.Deployment) []Container {
 	containerset := fillContainerDetails(pod)
-	for _, containerdata := range containerset {
+	var containers []Container
+	var deployment Deployment
+	for _, d := range deployments {
+		if IsMapSubset(pod.Labels, d.Spec.Selector.MatchLabels) {
+			deployment = Deployment{
+				Name: d.Name,
+			}
+		}
+	}
+
+	for containerName, containerData := range containerset {
 		img := image{
 			repo:   "",
 			tag:    "",
 			digest: "",
 		}
 
-		for _, container := range containerdata {
-			img.extractImageDetails(container)
-		}
-
-		if img.tag == "" {
-			if missingTagPolicy == "drop" {
-				log.Debugf("Dropping %s %s due to missing tag policy of 'drop'", img.repo, img.digest)
-				continue
+		for _, imgs := range containerData {
+			img.extractImageDetails(imgs)
+			if img.tag == "" {
+				if missingTagPolicy == "drop" {
+					log.Debugf("Dropping %s %s due to missing tag policy of 'drop'", img.repo, img.digest)
+					continue
+				}
+				img.handleMissingTag(missingTagPolicy, dummyTag)
 			}
-			img.handleMissingTag(missingTagPolicy, dummyTag)
 		}
 
-		key := fmt.Sprintf("%s:%s@%s", img.repo, img.tag, img.digest)
-		unique[key] = img
-	}
-
-	ri := make([]ReportImage, 0)
-	for _, u := range unique {
-		ri = append(ri, ReportImage{
-			Tag:        fmt.Sprintf("%s:%s", u.repo, u.tag),
-			RepoDigest: u.digest,
+		containers = append(containers, Container{
+			Name: containerName,
+			Image: Image{
+				Tag:        fmt.Sprintf("%s:%s", img.repo, img.tag),
+				RepoDigest: img.digest,
+			},
+			Pod: Pod{
+				Name:       pod.Name,
+				Deployment: deployment,
+			},
 		})
 	}
-	return ri
+
+	return containers
+}
+
+// IsMapSubset returns true if sub is a subset of m.
+func IsMapSubset[K, V comparable](m, sub map[K]V) bool {
+	if len(sub) > len(m) {
+		return false
+	}
+	for k, vsub := range sub {
+		if vm, found := m[k]; !found || vm != vsub {
+			return false
+		}
+	}
+	return true
 }

@@ -1,7 +1,6 @@
 package integration
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/anchore/kai/cmd"
@@ -34,16 +33,16 @@ func TestGetImageResults(t *testing.T) {
 		} else {
 			foundIntegrationTestNamespace = true
 			foundIntegrationTestImage := false
-			for _, image := range item.Images {
-				if !strings.Contains(image.Tag, IntegrationTestImageTag) {
-					continue
-				} else {
-					foundIntegrationTestImage = true
-					if image.RepoDigest == "" {
-						t.Logf("Image Found, but no digest located: %v", image)
-					}
-				}
-			}
+			// for _, image := range item.Images {
+			// 	if !strings.Contains(image.Tag, IntegrationTestImageTag) {
+			// 		continue
+			// 	} else {
+			// 		foundIntegrationTestImage = true
+			// 		if image.RepoDigest == "" {
+			// 			t.Logf("Image Found, but no digest located: %v", image)
+			// 		}
+			// 	}
+			// }
 			if !foundIntegrationTestImage {
 				t.Errorf("failed to locate integration test image")
 			}

@@ -22,6 +22,7 @@ import (
 	"github.com/anchore/kai/kai/client"
 	"github.com/anchore/kai/kai/inventory"
 	"github.com/anchore/kai/kai/logger"
+	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -33,13 +34,13 @@ type channels struct {
 }
 
 func HandleReport(report inventory.Report, cfg *config.Application) error {
-	if cfg.AnchoreDetails.IsValid() {
-		if err := reporter.Post(report, cfg.AnchoreDetails, cfg); err != nil {
-			return fmt.Errorf("unable to report Inventory to Anchore: %w", err)
-		}
-	} else {
-		log.Debug("Anchore details not specified, not reporting inventory")
+	// if cfg.XeolDetails.IsValid() {
+	if err := reporter.Post(report, cfg.XeolDetails, cfg); err != nil {
+		return fmt.Errorf("unable to report Inventory to Anchore: %w", err)
 	}
+	// } else {
+	// 	log.Debug("Anchore details not specified, not reporting inventory")
+	// }
 
 	if err := presenter.GetPresenter(cfg.PresenterOpt, report).Present(os.Stdout); err != nil {
 		return fmt.Errorf("unable to show inventory: %w", err)
@@ -275,14 +276,14 @@ func fetchNamespaces(kubeconfig *rest.Config, cfg *config.Application) ([]string
 // Atomic Function that gets all the Namespace Images for a given searchNamespace and reports them to the unbuffered results channel
 func fetchPodsInNamespace(clientset *kubernetes.Clientset, cfg *config.Application, ns string, ch channels) {
 	pods := make([]v1.Pod, 0)
+	deployments := make([]appsv1.Deployment, 0)
 	cont := ""
+	opts := metav1.ListOptions{
+		Limit:          cfg.Kubernetes.RequestBatchSize,
+		Continue:       cont,
+		TimeoutSeconds: &cfg.Kubernetes.RequestTimeoutSeconds,
+	}
 	for {
-		opts := metav1.ListOptions{
-			Limit:          cfg.Kubernetes.RequestBatchSize,
-			Continue:       cont,
-			TimeoutSeconds: &cfg.Kubernetes.RequestTimeoutSeconds,
-		}
-
 		list, err := clientset.CoreV1().Pods(ns).List(context.TODO(), opts)
 		if err != nil {
 			// TODO: Handle HTTP 410 and recover
@@ -299,8 +300,21 @@ func fetchPodsInNamespace(clientset *kubernetes.Clientset, cfg *config.Applicati
 		}
 	}
 
+	for {
+		list, err := clientset.AppsV1().Deployments(ns).List(context.TODO(), opts)
+		if err != nil {
+			ch.errors <- err
+			return
+		}
+		deployments = append(deployments, list.Items...)
+		cont = list.GetListMeta().GetContinue()
+		if cont == "" {
+			break
+		}
+	}
+
 	log.Debugf("There are %d pods in namespace \"%s\"", len(pods), ns)
-	ch.reportItem <- inventory.NewReportItem(pods, ns, cfg.IgnoreNotRunning, cfg.MissingTagPolicy.Policy, cfg.MissingTagPolicy.Tag)
+	ch.reportItem <- inventory.NewReportItem(pods, deployments, ns, cfg.IgnoreNotRunning, cfg.MissingTagPolicy.Policy, cfg.MissingTagPolicy.Tag)
 }
 
 func SetLogger(logger logger.Logger) {
