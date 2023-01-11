@@ -32,7 +32,7 @@ xeolAgent:
 
 It will set the following environment variable based on this: `XEOL_AGENT_API_KEY=foobar`.
 
-If you don't want to store your Anchore password in the values file, you can create your own secret to do this:
+If you don't want to store your xeol ApiKey in the values file, you can create your own secret to do this:
 
 ```yaml
 apiVersion: v1
@@ -177,7 +177,7 @@ example when an image is deployed using the digest.
 kubectl run python --image=python@sha256:f0a210a37565286ecaaac0529a6749917e8ea58d3dfc72c84acfbfbe1a64a20a
 ```
 
-Anchore Enterprise will use the image digest to process an image but it still requires a tag to be
+xeol.io will use the image digest to process an image but it still requires a tag to be
 associated with the image. The `missing-tag-policy` lets you configure the best way to handle the
 missing tag edge case in your environment.
 
