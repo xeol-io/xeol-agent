@@ -1,6 +1,5 @@
 # xeol-agent
 
-[![CircleCI](https://circleci.com/gh/noqcks/xeol-agent.svg?style=svg&circle-token=6f6ffa17b0630e6af622e162d594e2312c136d94)](https://circleci.com/gh/noqcks/xeol-agent)
 [![Go Report Card](https://goreportcard.com/badge/github.com/noqcks/xeol-agent)](https://goreportcard.com/report/github.com/noqcks/xeol-agent)
 [![GitHub release](https://img.shields.io/github/release/noqcks/xeol-agent.svg)](https://github.com/noqcks/xeol-agent/releases/latest)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/noqcks/xeol-agent/blob/main/LICENSE)

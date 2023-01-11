@@ -4,10 +4,6 @@ release:
   # If set to true, will mark the release as not ready for production.
   prerelease: false
 
-signs:
-  - artifacts: checksum
-    args: ["--output", "${signature}", "--detach-sign", "${artifact}"]
-
 builds:
   - binary: xeol-agent
     env:
