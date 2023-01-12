@@ -48,7 +48,7 @@ func HandleReport(report inventory.Report, cfg *config.Application) error {
 // Note: Errors do not cause the function to exit, since this is periodically running
 func PeriodicallyGetInventoryReport(cfg *config.Application) {
 	// Fire off a ticker that reports according to a configurable polling interval
-	ticker := time.NewTicker(time.Duration(cfg.PollingIntervalSeconds) * time.Second)
+	ticker := time.NewTicker(time.Duration(cfg.PollingIntervalMinutes) * time.Minute)
 
 	for {
 		report, err := GetInventoryReport(cfg)
