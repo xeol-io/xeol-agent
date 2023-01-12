@@ -1,0 +1,188 @@
+---
+# Source: xeol-agent/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: xeol-agent
+  labels:
+    helm.sh/chart: xeol-agent-0.1.1
+    app.kubernetes.io/name: xeol-agent
+    app.kubernetes.io/instance: xeol-agent
+    app.kubernetes.io/version: "0.1.1"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: xeol-agent/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: xeol-agent
+  labels:
+    app: xeol-agent
+    chart: xeol-agent-0.1.1
+    release: xeol-agent
+    heritage: Helm
+type: Opaque
+stringData:
+  XEOL_AGENT_API_KEY: foobar
+---
+# Source: xeol-agent/templates/configmap.yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: xeol-agent
+  labels:
+    app: xeol-agent
+    chart: xeol-agent-0.1.1
+    release: xeol-agent
+    heritage: Helm
+data:
+  config.yaml: |
+    kubeconfig:
+      path: use-in-cluster
+      cluster: docker-desktop
+    output: json
+    quiet: false
+    log:
+      structured: false
+      level: debug
+      file:
+    namespaces:
+      null
+    namespace-selectors:
+      exclude: []
+      include: []
+    mode: periodic
+    polling-interval-seconds: 60
+    kubernetes-request-timeout-seconds:
+    kubernetes:
+      request-timeout-seconds: 60
+      request-batch-size: 100
+      worker-pool-size: 100
+    ignore-not-running: true
+    missing-tag-policy:
+      policy: digest
+      tag: UNKNOWN
+    xeol:
+      url:
+      apiKey: $XEOL_AGENT_API_KEY
+      http:
+        insecure: true
+        timeout-seconds: 10
+---
+# Source: xeol-agent/templates/cluster-role-readonly.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: xeol-agent-read-only
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "watch", "list"]
+---
+# Source: xeol-agent/templates/cluster-role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: xeol-agent-read-only-binding
+subjects:
+  - kind: ServiceAccount
+    name: xeol-agent
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: xeol-agent-read-only
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: xeol-agent/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: xeol-agent
+  labels:
+    helm.sh/chart: xeol-agent-0.1.1
+    app.kubernetes.io/name: xeol-agent
+    app.kubernetes.io/instance: xeol-agent
+    app.kubernetes.io/version: "0.1.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: xeol-agent
+    app.kubernetes.io/instance: xeol-agent
+---
+# Source: xeol-agent/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xeol-agent
+  labels:
+    helm.sh/chart: xeol-agent-0.1.1
+    app.kubernetes.io/name: xeol-agent
+    app.kubernetes.io/instance: xeol-agent
+    app.kubernetes.io/version: "0.1.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: xeol-agent
+      app.kubernetes.io/instance: xeol-agent
+  template:
+    metadata:
+      annotations:
+        checksum/config: 086c25745a81ff5af02d90680be0c04fd23e2226c1ab832b1479182ae7535f9c
+      labels:
+        app.kubernetes.io/name: xeol-agent
+        app.kubernetes.io/instance: xeol-agent
+    spec:
+      serviceAccountName: xeol-agent
+      securityContext:
+        {}
+      containers:
+        - name: xeol-agent
+          securityContext:
+            {}
+          image: "noqcks/xeol-agent:v0.1.1"
+          imagePullPolicy: IfNotPresent
+          command: ["xeol-agent"]
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - xeol-agent
+                - version
+            initialDelaySeconds: 1
+            timeoutSeconds: 10
+            periodSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            exec:
+              command:
+                - xeol-agent
+                - version
+            timeoutSeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+            successThreshold: 1
+          resources:
+            {}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/xdg/agent/config.yaml
+              subPath: config.yaml
+          envFrom:
+            - secretRef:
+                name: xeol-agent
+      volumes:
+        - name: config-volume
+          configMap:
+            name: xeol-agent

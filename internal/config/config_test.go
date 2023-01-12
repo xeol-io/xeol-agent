@@ -27,7 +27,7 @@ func TestEmptyConfigString(t *testing.T) {
 
 func TestDefaultConfigString(t *testing.T) {
 	config, err := LoadConfigFromFile(viper.GetViper(), &CliOnlyOptions{
-		ConfigPath: "../../agent.yaml",
+		ConfigPath: "../../xeol-agent.yaml",
 	})
 	if err != nil {
 		t.Errorf("failed to load application config: \n\t%+v\n", err)
@@ -47,7 +47,7 @@ func TestDefaultConfigString(t *testing.T) {
 
 func TestSensitiveConfigString(t *testing.T) {
 	config, err := LoadConfigFromFile(viper.GetViper(), &CliOnlyOptions{
-		ConfigPath: "../../agent.yaml",
+		ConfigPath: "../../xeol-agent.yaml",
 	})
 	if err != nil {
 		t.Errorf("failed to load application config: \n\t%+v\n", err)
