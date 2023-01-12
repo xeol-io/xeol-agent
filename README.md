@@ -141,6 +141,7 @@ namespace-selectors:
   exclude: []
 ```
 
+
 ### Kubernetes API Parameters
 
 This section will allow users to tune the way xeol-agent interacts with the kubernetes API server.
