@@ -13,7 +13,7 @@ trap cleanup EXIT
 
 helm repo add xeol https://charts.xeol.io
 
-helm install "$RELEASE" -f ./test/acceptance/fixtures/helm/values.yaml noqcks/xeol-agent
+helm install "$RELEASE" -f ./test/acceptance/fixtures/helm/values.yaml xeol/xeol-agent
 
 sleep 1
 max_iterations=60
