@@ -40,7 +40,7 @@ func Post(report inventory.Report, xeolDetails config.XeolInfo, appConfig *confi
 		return fmt.Errorf("failed to build request to report data to xeol.io: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("apiKey %s", xeolDetails.APIKey))
+	req.Header.Set("Authorization", fmt.Sprintf("ApiKey %s", xeolDetails.APIKey))
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to report data to xeol.io: %w", err)

@@ -27,7 +27,7 @@ based on the values file you use, Ex.:
 ```yaml
 xeolAgent:
   xeol:
-    apiKey: foobar
+    api-key: foobar
 ```
 
 It will set the following environment variable based on this: `XEOL_AGENT_API_KEY=foobar`.

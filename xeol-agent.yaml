@@ -79,7 +79,7 @@ missing-tag-policy:
 ignore-not-running: true
 
 # Only respected if mode is periodic
-polling-interval-seconds: 300
+polling-interval-minutes: 300
 
 xeol:
   api-key: $XEOL_API_KEY

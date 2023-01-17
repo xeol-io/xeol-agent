@@ -40,7 +40,7 @@ mode: ""
 ignorenotrunning: false
 pollingintervalminutes: 0
 xeoldetails:
-  apikey: ""
+  api-key: ""
   http:
     insecure: false
     timeoutseconds: 0
