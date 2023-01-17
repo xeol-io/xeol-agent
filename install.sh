@@ -336,7 +336,7 @@ End of functions from https://github.com/client9/shlib
 EOF
 
 PROJECT_NAME="xeol-agent"
-OWNER=anchore
+OWNER=noqcks
 REPO="xeol-agent"
 BINARY=xeol-agent
 FORMAT=tar.gz

@@ -77,7 +77,7 @@ type KubernetesAPI struct {
 	WorkerPoolSize        int   `mapstructure:"worker-pool-size"`
 }
 
-// Information for posting in-use image details to Anchore (or any URL for that matter)
+// Information for posting in-use image details to xeol engine (or any URL for that matter)
 type XeolInfo struct {
 	APIKey string     `mapstructure:"api-key"`
 	HTTP   HTTPConfig `mapstructure:"http"`
@@ -112,10 +112,8 @@ func setNonCliDefaultValues(v *viper.Viper) {
 	v.SetDefault("log.file", "")
 	v.SetDefault("log.structured", false)
 	v.SetDefault("dev.profile-cpu", false)
-	v.SetDefault("anchore.account", "admin")
-	v.SetDefault("kubeconfig.anchore.account", "admin")
-	v.SetDefault("anchore.http.insecure", false)
-	v.SetDefault("anchore.http.timeout-seconds", 10)
+	v.SetDefault("xeol.http.insecure", false)
+	v.SetDefault("xeol.http.timeout-seconds", 10)
 	v.SetDefault("kubernetes-request-timeout-seconds", -1)
 	v.SetDefault("kubernetes.request-timeout-seconds", 60)
 	v.SetDefault("kubernetes.request-batch-size", 100)

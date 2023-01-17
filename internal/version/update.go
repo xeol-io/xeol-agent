@@ -14,11 +14,11 @@ var latestAppVersionURL = struct {
 	host string
 	path string
 }{
-	host: "https://toolbox-data.anchore.io",
+	host: "https://data.xeol.io",
 	path: fmt.Sprintf("/%s/releases/latest/VERSION", internal.ApplicationName),
 }
 
-// Based on the current version, check if a new version is available from toolbox-data.anchore.io
+// Based on the current version, check if a new version is available from data.xeol.io
 func IsUpdateAvailable() (bool, string, error) {
 	currentVersionStr := FromBuild().Version
 	currentVersion, err := hashiVersion.NewVersion(currentVersionStr)

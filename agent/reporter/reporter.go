@@ -14,13 +14,14 @@ import (
 	"github.com/noqcks/xeol-agent/internal/log"
 )
 
-const ReportAPIPath = "v1/enterprise/inventories"
+const ReportAPIPath = "v1/inventories"
+const ReportAPIURL = "https://engine.xeol.io/" + ReportAPIPath
 
 // This method does the actual Reporting (via HTTP) to xeol.io
 //
 //nolint:gosec
 func Post(report inventory.Report, xeolDetails config.XeolInfo, appConfig *config.Application) error {
-	log.Debug("Reporting results to xeol.io")
+	log.Debug("Reporting results to engine.xeol.io")
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: xeolDetails.HTTP.Insecure},
 	}
@@ -29,15 +30,12 @@ func Post(report inventory.Report, xeolDetails config.XeolInfo, appConfig *confi
 		Timeout:   time.Duration(xeolDetails.HTTP.TimeoutSeconds) * time.Second,
 	}
 
-	// xeolURL := "https://xeol.io/api/v1/enterprise/inventories"
-	xeolURL := "https://35b4-2604-3d09-117f-f180-48d2-ab9f-244b-5100.ngrok.io/v1/inventories"
-
 	reqBody, err := json.Marshal(report)
 	if err != nil {
 		return fmt.Errorf("failed to serialize results as JSON: %w", err)
 	}
 
-	req, err := http.NewRequest("PUT", xeolURL, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest("PUT", ReportAPIURL, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return fmt.Errorf("failed to build request to report data to xeol.io: %w", err)
 	}
