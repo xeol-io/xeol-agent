@@ -43,4 +43,4 @@ xeoldetails:
   apikey: '******'
   http:
     insecure: false
-    timeoutseconds: 0
+    timeoutseconds: 10
