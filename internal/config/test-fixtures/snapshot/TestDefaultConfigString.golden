@@ -38,9 +38,9 @@ missingtagpolicy:
 runmode: 0
 mode: adhoc
 ignorenotrunning: true
-pollingintervalminutes: 0
+pollingintervalminutes: 300
 xeoldetails:
-  api-key: '******'
+  apikey: '******'
   http:
     insecure: false
     timeoutseconds: 10
