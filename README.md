@@ -55,7 +55,7 @@ xeol-agent's helm chart is part of the [charts.xeol.io](https://charts.xeol.io) 
 
 ```sh
 helm repo add xeol https://charts.xeol.io
-helm install <release-name> -f <values.yaml> noqcks/xeol-agent
+helm install <release-name> -f <values.yaml> xeol/xeol-agent
 ```
 
 A basic values file can always be found [here](https://github.com/noqcks/xeol-charts/tree/master/stable/xeol-agent/values.yaml)
