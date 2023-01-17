@@ -31,7 +31,7 @@ type channels struct {
 
 func HandleReport(report inventory.Report, cfg *config.Application) error {
 	if cfg.XeolDetails.IsValid() {
-		if err := reporter.Post(report, cfg.XeolDetails, cfg); err != nil {
+		if err := reporter.Put(report, cfg.XeolDetails, cfg); err != nil {
 			return fmt.Errorf("unable to report Inventory to xeol: %w", err)
 		}
 	} else {

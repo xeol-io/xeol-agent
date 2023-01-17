@@ -20,7 +20,7 @@ const ReportAPIURL = "https://engine.xeol.io/" + ReportAPIPath
 // This method does the actual Reporting (via HTTP) to xeol.io
 //
 //nolint:gosec
-func Post(report inventory.Report, xeolDetails config.XeolInfo, appConfig *config.Application) error {
+func Put(report inventory.Report, xeolDetails config.XeolInfo, appConfig *config.Application) error {
 	log.Debug("Reporting results to engine.xeol.io")
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: xeolDetails.HTTP.Insecure},
