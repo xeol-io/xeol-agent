@@ -1,1 +1,3 @@
-No Images found
+IMAGE TAG                                      REPO DIGEST                                                              NAMESPACE   
+docker/kube-compose-controller:v0.4.25-alpha1  sha256:6ad2d6a2cc1909fbc477f64e3292c16b88db31eb83458f420eb223f119f3dffd  docker       
+docker/kube-compose-controller:v0.4.25-alpha1  sha256:6ad2d6a2cc1909fbc477f64e3292c16b88db31eb83458f420eb223f119f3dffd  kube-system  
