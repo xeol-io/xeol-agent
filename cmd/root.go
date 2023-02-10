@@ -89,7 +89,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	opt = "polling-interval-seconds"
+	opt = "polling-interval-minutes"
 	rootCmd.Flags().StringP(opt, "p", "300", "If mode is 'periodic', this specifies the interval")
 	if err := viper.BindPFlag(opt, rootCmd.Flags().Lookup(opt)); err != nil {
 		fmt.Printf("unable to bind flag '%s': %+v", opt, err)

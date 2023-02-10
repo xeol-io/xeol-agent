@@ -30,7 +30,7 @@ xeolAgent:
     api-key: foobar
 ```
 
-It will set the following environment variable based on this: `XEOL_AGENT_API_KEY=foobar`.
+It will set the following environment variable based on this: `XEOL_AGENT_XEOL_API_KEY=foobar`.
 
 If you don't want to store your xeol ApiKey in the values file, you can create your own secret to do this:
 
@@ -41,7 +41,7 @@ metadata:
   name: xeol-agent-api-key
 type: Opaque
 stringData:
-  XEOL_AGENT_API_KEY: foobar
+  XEOL_AGENT_XEOL_API_KEY: foobar
 ```
 
 and then provide it to the helm chart via the values file:
@@ -166,7 +166,7 @@ kubernetes:
 mode: adhoc
 
 # Only respected if mode is periodic
-polling-interval-seconds: 300
+polling-interval-minutes: 300
 ```
 
 ### Missing Tag Policy

@@ -2,9 +2,9 @@
 The Config package handles the application configuration. Configurations can come from a variety of places, and
 are listed below in order of precedence:
   - Command Line
-  - .xeol-xeol-agent.yaml
+  - .xeol-agent.yaml
   - .xeol-agent/config.yaml
-  - ~/.xeol-xeol-agent.yaml
+  - ~/.xeol-agent.yaml
   - <XDG_CONFIG_HOME>/xeol-agent/config.yaml
   - Environment Variables prefixed with XEOL_AGENT_
 */
