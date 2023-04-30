@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"runtime/pprof"
@@ -43,7 +44,8 @@ var rootCmd = &cobra.Command{
 
 		switch appConfig.RunMode {
 		case mode.PeriodicPolling:
-			agent.PeriodicallyGetInventoryReport(appConfig)
+			ctx := context.Background()
+			agent.PeriodicallyGetInventoryReport(ctx, appConfig, agent.GetInventoryReport, agent.HandleReport)
 		default:
 			report, err := agent.GetInventoryReport(appConfig)
 			if appConfig.Dev.ProfileCPU {

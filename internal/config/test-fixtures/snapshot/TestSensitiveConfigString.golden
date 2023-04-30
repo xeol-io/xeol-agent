@@ -39,6 +39,7 @@ runmode: 0
 mode: adhoc
 ignorenotrunning: true
 pollingintervalminutes: 300
+pollingintervalseconds: 0
 xeoldetails:
   apikey: '******'
   http:

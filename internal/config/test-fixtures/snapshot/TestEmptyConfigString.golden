@@ -39,6 +39,7 @@ runmode: 0
 mode: ""
 ignorenotrunning: false
 pollingintervalminutes: 0
+pollingintervalseconds: 0
 xeoldetails:
   apikey: ""
   http:
