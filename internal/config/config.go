@@ -55,6 +55,7 @@ type Application struct {
 	Mode                            string   `mapstructure:"mode"`
 	IgnoreNotRunning                bool     `mapstructure:"ignore-not-running"`
 	PollingIntervalMinutes          int      `mapstructure:"polling-interval-minutes"`
+	PollingIntervalSeconds          int      `mapstructure:"polling-interval-seconds"`
 	XeolDetails                     XeolInfo `mapstructure:"xeol"`
 }
 

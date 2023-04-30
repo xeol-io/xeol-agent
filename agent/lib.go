@@ -46,23 +46,42 @@ func HandleReport(report inventory.Report, cfg *config.Application) error {
 
 // PeriodicallyGetInventoryReport periodically retrieve image results and report/output them according to the configuration.
 // Note: Errors do not cause the function to exit, since this is periodically running
-func PeriodicallyGetInventoryReport(cfg *config.Application) {
+func PeriodicallyGetInventoryReport(ctx context.Context, cfg *config.Application, getInventoryReportFunc func(cfg *config.Application) (inventory.Report, error), reportHandler func(report inventory.Report, cfg *config.Application) error) {
 	// Fire off a ticker that reports according to a configurable polling interval
-	ticker := time.NewTicker(time.Duration(cfg.PollingIntervalMinutes) * time.Minute)
+	var ticker *time.Ticker
+	if cfg.PollingIntervalSeconds != 0 {
+		ticker = time.NewTicker(time.Duration(cfg.PollingIntervalSeconds) * time.Second)
+	}
+	if cfg.PollingIntervalMinutes != 0 {
+		ticker = time.NewTicker(time.Duration(cfg.PollingIntervalMinutes) * time.Minute)
+	}
+
+	// report immediately if this is the first time the agent is reporting
+	// this is to ensure the user get immediate feedback that the agent is running
+	firstReport := true
 
 	for {
-		report, err := GetInventoryReport(cfg)
-		if err != nil {
-			log.Errorf("Failed to get Inventory Report: %w", err)
-		} else {
-			err := HandleReport(report, cfg)
-			if err != nil {
-				log.Errorf("Failed to handle Inventory Report: %w", err)
+		if !firstReport {
+			// Wait at least as long as the ticker
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
 			}
 		}
 
-		// Wait at least as long as the ticker
-		log.Debugf("Start new gather: %s", <-ticker.C)
+		log.Debugf("Start new gather: %s", time.Now())
+
+		report, err := getInventoryReportFunc(cfg)
+		if err != nil {
+			log.Errorf("Failed to get Inventory Report: %v", err)
+		} else {
+			err := reportHandler(report, cfg)
+			if err != nil {
+				log.Errorf("Failed to handle Inventory Report: %v", err)
+			}
+		}
+		firstReport = false
 	}
 }
 
