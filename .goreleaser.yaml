@@ -20,10 +20,10 @@ builds:
       -w
       -s
       -extldflags '-static'
-      -X github.com/noqcks/xeol-agent/internal/version.version={{.Version}}
-      -X github.com/noqcks/xeol-agent/internal/version.gitCommit={{.Commit}}
-      -X github.com/noqcks/xeol-agent/internal/version.buildDate={{.Date}}
-      -X github.com/noqcks/xeol-agent/internal/version.gitTreeState={{.Env.BUILD_GIT_TREE_STATE}}
+      -X github.com/xeol-io/xeol-agent/internal/version.version={{.Version}}
+      -X github.com/xeol-io/xeol-agent/internal/version.gitCommit={{.Commit}}
+      -X github.com/xeol-io/xeol-agent/internal/version.buildDate={{.Date}}
+      -X github.com/xeol-io/xeol-agent/internal/version.gitTreeState={{.Env.BUILD_GIT_TREE_STATE}}
 
 archives:
   - format: tar.gz

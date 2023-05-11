@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/noqcks/xeol-agent/agent/inventory"
-	"github.com/noqcks/xeol-agent/internal/config"
+	"github.com/xeol-io/xeol-agent/agent/inventory"
+	"github.com/xeol-io/xeol-agent/internal/config"
 )
 
 func TestPeriodicallyGetInventoryReport(t *testing.T) {

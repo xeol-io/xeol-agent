@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	hashiVersion "github.com/anchore/go-version"
-	"github.com/noqcks/xeol-agent/internal"
+	"github.com/xeol-io/xeol-agent/internal"
 )
 
 var latestAppVersionURL = struct {

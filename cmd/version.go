@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/noqcks/xeol-agent/internal"
-	"github.com/noqcks/xeol-agent/internal/version"
+	"github.com/xeol-io/xeol-agent/internal"
+	"github.com/xeol-io/xeol-agent/internal/version"
 	"github.com/spf13/cobra"
 )
 

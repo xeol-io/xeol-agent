@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/noqcks/xeol-agent/agent/inventory"
+	"github.com/xeol-io/xeol-agent/agent/inventory"
 	"k8s.io/apimachinery/pkg/version"
 
 	"github.com/anchore/go-testutils"

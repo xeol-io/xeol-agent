@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	agent "github.com/noqcks/xeol-agent/agent"
-	"github.com/noqcks/xeol-agent/internal/config"
-	"github.com/noqcks/xeol-agent/internal/logger"
+	agent "github.com/xeol-io/xeol-agent/agent"
+	"github.com/xeol-io/xeol-agent/internal/config"
+	"github.com/xeol-io/xeol-agent/internal/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

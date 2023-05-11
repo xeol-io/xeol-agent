@@ -6,10 +6,10 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/noqcks/xeol-agent/agent/mode"
+	"github.com/xeol-io/xeol-agent/agent/mode"
 
-	agent "github.com/noqcks/xeol-agent/agent"
-	"github.com/noqcks/xeol-agent/agent/presenter"
+	agent "github.com/xeol-io/xeol-agent/agent"
+	"github.com/xeol-io/xeol-agent/agent/presenter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

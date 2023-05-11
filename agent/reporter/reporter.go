@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/noqcks/xeol-agent/agent/inventory"
-	"github.com/noqcks/xeol-agent/internal/config"
-	"github.com/noqcks/xeol-agent/internal/log"
+	"github.com/xeol-io/xeol-agent/agent/inventory"
+	"github.com/xeol-io/xeol-agent/internal/config"
+	"github.com/xeol-io/xeol-agent/internal/log"
 )
 
 const ReportAPIPath = "v1/inventories"

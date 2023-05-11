@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/noqcks/xeol-agent/agent/inventory"
+	"github.com/xeol-io/xeol-agent/agent/inventory"
 )
 
 // Presenter is a generic struct for holding fields needed for reporting
