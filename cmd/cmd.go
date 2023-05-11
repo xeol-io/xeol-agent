@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	agent "github.com/xeol-io/xeol-agent/agent"
-	"github.com/xeol-io/xeol-agent/internal/config"
-	"github.com/xeol-io/xeol-agent/internal/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	agent "github.com/xeol-io/xeol-agent/agent"
+	"github.com/xeol-io/xeol-agent/internal/config"
+	"github.com/xeol-io/xeol-agent/internal/logger"
 )
 
 var appConfig *config.Application

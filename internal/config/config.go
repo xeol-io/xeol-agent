@@ -19,10 +19,10 @@ import (
 
 	"github.com/adrg/xdg"
 	"github.com/mitchellh/go-homedir"
-	"github.com/xeol-io/xeol-agent/agent/presenter"
-	"github.com/xeol-io/xeol-agent/internal"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/xeol-io/xeol-agent/agent/presenter"
+	"github.com/xeol-io/xeol-agent/internal"
 
 	"path"
 	"strings"

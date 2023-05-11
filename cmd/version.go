@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/xeol-io/xeol-agent/internal"
 	"github.com/xeol-io/xeol-agent/internal/version"
-	"github.com/spf13/cobra"
 )
 
 var outputFormat string
