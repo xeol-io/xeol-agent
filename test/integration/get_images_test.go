@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	agent "github.com/noqcks/xeol-agent/agent"
-	"github.com/noqcks/xeol-agent/cmd"
+	agent "github.com/xeol-io/xeol-agent/agent"
+	"github.com/xeol-io/xeol-agent/cmd"
 )
 
 const IntegrationTestNamespace = "xeol-agent-integration-test"

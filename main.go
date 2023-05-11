@@ -1,6 +1,6 @@
 package main
 
-import "github.com/noqcks/xeol-agent/cmd"
+import "github.com/xeol-io/xeol-agent/cmd"
 
 func main() {
 	cmd.Execute()

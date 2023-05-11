@@ -1,8 +1,8 @@
 # xeol-agent
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/noqcks/xeol-agent)](https://goreportcard.com/report/github.com/noqcks/xeol-agent)
-[![GitHub release](https://img.shields.io/github/release/noqcks/xeol-agent.svg)](https://github.com/noqcks/xeol-agent/releases/latest)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/noqcks/xeol-agent/blob/main/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xeol-io/xeol-agent)](https://goreportcard.com/report/github.com/xeol-io/xeol-agent)
+[![GitHub release](https://img.shields.io/github/release/xeol-io/xeol-agent.svg)](https://github.com/xeol-io/xeol-agent/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/xeol-io/xeol-agent/blob/main/LICENSE)
 
 The xeol-agent poll the Kubernetes API on an interval to retrieve inventory data about the
 the cluster and reports back to xeol.io.
@@ -11,7 +11,7 @@ It can be run inside a cluster (under a Service Account) or outside (via any pro
 
 ## Getting Started
 
-[Install the binary](#installation) or Download the [Docker image](https://hub.docker.com/repository/docker/noqcks/xeol-agent)
+[Install the binary](#installation) or Download the [Docker image](https://hub.docker.com/repository/docker/xeol-io/xeol-agent)
 
 ## Installation
 
@@ -58,7 +58,7 @@ helm repo add xeol https://charts.xeol.io
 helm install <release-name> -f <values.yaml> xeol/xeol-agent
 ```
 
-A basic values file can always be found [here](https://github.com/noqcks/xeol-charts/tree/master/stable/xeol-agent/values.yaml)
+A basic values file can always be found [here](https://github.com/xeol-io/xeol-charts/tree/master/stable/xeol-agent/values.yaml)
 
 ## Configuration
 ```yaml
@@ -321,4 +321,4 @@ This will trigger a GitHub Action that will create the release.
 
 After the release has been successfully created, make sure to specify the updated version
 in both Enterprise and the xeol-agent Helm Chart in
-[xeol-charts](https://github.com/noqcks/xeol-charts).
+[xeol-charts](https://github.com/xeol-io/xeol-charts).

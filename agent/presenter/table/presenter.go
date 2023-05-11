@@ -5,7 +5,7 @@ import (
 	"io"
 	"sort"
 
-	"github.com/noqcks/xeol-agent/agent/inventory"
+	"github.com/xeol-io/xeol-agent/agent/inventory"
 
 	"github.com/olekukonko/tablewriter"
 )

@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/noqcks/xeol-agent/internal/log"
+	"github.com/xeol-io/xeol-agent/internal/log"
 	appsv1 "k8s.io/api/apps/v1"
 
 	v1 "k8s.io/api/core/v1"

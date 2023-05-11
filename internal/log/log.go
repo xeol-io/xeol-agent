@@ -1,7 +1,7 @@
 // Kai's log wrapper
 package log
 
-import "github.com/noqcks/xeol-agent/agent/logger"
+import "github.com/xeol-io/xeol-agent/agent/logger"
 
 var Log logger.Logger = &nopLogger{}
 

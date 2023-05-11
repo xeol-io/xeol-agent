@@ -136,7 +136,7 @@ integration: ## Run integration tests
 	./test/integration/test-integration.sh $(CLUSTER_NAME)
 
 .PHONY: acceptance-helm
-acceptance-helm: ## Verify that the latest helm chart for xeol-agent works w/ the latest code (depends on noqcks/xeol-agent:latest image existing)
+acceptance-helm: ## Verify that the latest helm chart for xeol-agent works w/ the latest code (depends on xeol-io/xeol-agent:latest image existing)
 	$(call title,Running acceptance test: Helm)
 	$(ACC_DIR)/helm-chart.sh \
 

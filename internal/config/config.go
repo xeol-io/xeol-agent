@@ -15,14 +15,14 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/noqcks/xeol-agent/agent/mode"
+	"github.com/xeol-io/xeol-agent/agent/mode"
 
 	"github.com/adrg/xdg"
 	"github.com/mitchellh/go-homedir"
-	"github.com/noqcks/xeol-agent/agent/presenter"
-	"github.com/noqcks/xeol-agent/internal"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/xeol-io/xeol-agent/agent/presenter"
+	"github.com/xeol-io/xeol-agent/internal"
 
 	"path"
 	"strings"
